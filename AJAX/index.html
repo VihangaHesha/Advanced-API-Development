@@ -14,28 +14,35 @@
 
 <button id="ajaxBtn">Send An Ajax Request</button>
 
+<section>
+    <h1 id="userId">User Id : </h1>
+    <h2 id="id">Id :</h2>
+    <h2 id="title">Title :</h2>
+    <h2 id="body">Body :</h2>
+</section>
+
 
 <script src="Js/jquery.min.js"></script>
 
 <script>
     $('#ajaxBtn').click(function () {
         console.log('Request Started!')
-        $.ajax(
-            {
-                url: 'db/db.txt',
-                success: function (response) {
-                    console.log(response)
-                },
-                error: function (error) {
-                    console.log(error)
-                }
+        $.ajax({
+            url: 'https://jsonplaceholder.typicode.com/posts/3',
+            // async: false,
+            success: function (response) {
+                $('#userId').append(response.userId)
+                $('#id').append(response.id)
+                $('#title').append(response.title)
+                $('#body').append(response.body)
             }
-        )
+
+        })
         console.log('Request Finished!')
     });
 </script>
 
-<script>
+<!--<script>
     //Synchronous
     /* console.log('1')
     console.log('2')
@@ -50,6 +57,6 @@
     setTimeout(() => {
         console.log('Middle-2')
     }, 1000)
-</script>
+</script>-->
 </body>
 </html>
