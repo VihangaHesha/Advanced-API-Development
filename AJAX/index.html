@@ -22,9 +22,9 @@
         console.log('Request Started!')
         var http = new XMLHttpRequest();
 
-        console.log(http.readyState, 'After the XMLHTTPRequest Object Created')
+        console.log(http.readyState)
 
-        http.open('GET', 'db/db.txt')
+        http.open('GET', 'db/db.txt', false)
 
         console.log(http.readyState, 'After the Open Method Invoked!')
         console.log(http.responseText)
@@ -51,6 +51,23 @@
         }
         console.log('Request Finished!')
     });
+</script>
+
+<script>
+    //Synchronous
+    /* console.log('1')
+    console.log('2')
+    console.log('3') */
+
+    //Asynchronous
+    console.log('Start')
+    setTimeout(() => {
+        console.log('Middle-1')
+    }, 2000)
+    console.log('End')
+    setTimeout(() => {
+        console.log('Middle-2')
+    }, 1000)
 </script>
 </body>
 </html>
