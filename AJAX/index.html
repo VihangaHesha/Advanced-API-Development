@@ -20,35 +20,17 @@
 <script>
     $('#ajaxBtn').click(function () {
         console.log('Request Started!')
-        var http = new XMLHttpRequest();
-
-        console.log(http.readyState)
-
-        http.open('GET', 'db/db.txt', false)
-
-        console.log(http.readyState, 'After the Open Method Invoked!')
-        console.log(http.responseText)
-        console.log(http.readyState, 'After th Response Text Printed! ')
-
-        http.send();
-
-        console.log(http.readyState, 'After the Send Method Invoked!')
-
-        http.onreadystatechange = function () {
-            console.log(http.readyState, "Inside on Ready State Change Event")
-
-            if (http.readyState === 4 && http.status === 200) {
-                console.log(http.responseText)
-                $('#para').text(http.responseText)
+        $.ajax(
+            {
+                url: 'db/db.txt',
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function (error) {
+                    console.log(error)
+                }
             }
-            console.log(http.readyState)
-            console.log(http.status)
-            console.log(http.responseText)
-
-            if (http.readyState === 4 && http.status === 200) {
-                $('#img').attr('src', 'images/The Culinary Academy(Bg-Removed).png').show()
-            }
-        }
+        )
         console.log('Request Finished!')
     });
 </script>
