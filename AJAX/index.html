@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax Example</title>
+</head>
+<body>
+<h1>This is an example project for Ajax</h1>
+<p id="para">Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph
+    Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph</p>
+
+<img id="img" src="">
+
+
+<button id="ajaxBtn">Send An Ajax Request</button>
+
+
+<script src="Js/jquery.min.js"></script>
+
+<script>
+    $('#ajaxBtn').click(function () {
+        console.log('Request Started!')
+        var http = new XMLHttpRequest();
+
+        console.log(http.readyState, 'After the XMLHTTPRequest Object Created')
+
+        http.open('GET', 'db/db.txt')
+
+        console.log(http.readyState, 'After the Open Method Invoked!')
+        console.log(http.responseText)
+        console.log(http.readyState, 'After th Response Text Printed! ')
+
+        http.send();
+
+        console.log(http.readyState, 'After the Send Method Invoked!')
+
+        http.onreadystatechange = function () {
+            console.log(http.readyState, "Inside on Ready State Change Event")
+
+            if (http.readyState === 4 && http.status === 200) {
+                console.log(http.responseText)
+                $('#para').text(http.responseText)
+            }
+            console.log(http.readyState)
+            console.log(http.status)
+            console.log(http.responseText)
+
+            if (http.readyState === 4 && http.status === 200) {
+                $('#img').attr('src', 'images/The Culinary Academy(Bg-Removed).png').show()
+            }
+        }
+        console.log('Request Finished!')
+    });
+</script>
+</body>
+</html>
