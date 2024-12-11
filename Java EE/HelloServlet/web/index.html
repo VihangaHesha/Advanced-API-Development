@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Application</title>
+</head>
+<body>
+<h1>First Web Application</h1>
+<button id="ajaxBtn">Send An Ajax Request</button>
+
+<script src="assets/Js/jquery.min.js"></script>
+<script>
+    $('#ajaxBtn').click(function () {
+        console.log('Request Started!')
+        $.ajax({
+            url: 'http://localhost:8080//HelloServlet_war_exploded/hello',
+            method: 'OPTIONS',
+            success: function (response) {
+                console.log(response)
+            }
+
+        })
+        console.log('Request Finished!')
+    });
+</script>
+</body>
+</html>

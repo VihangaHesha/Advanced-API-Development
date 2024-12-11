@@ -14,29 +14,7 @@
 
 <button id="ajaxBtn">Send An Ajax Request</button>
 
-<section>
-    <h1 id="userId">User Id : </h1>
-    <h2 id="id">Id :</h2>
-    <h2 id="title">Title :</h2>
-    <h2 id="body">Body :</h2>
-</section>
-
 <button id="tableBtn">Add Details To The Table</button>
-
-<table border="1px,solid,black" cellspacing="0" id="tbl">
-    <thead>
-    <th>User Id</th>
-    <th>Id</th>
-    <th>Title</th>
-    <th>Body</th>
-    </thead>
-    <tr>
-        <td id="userIds"></td>
-        <td id="ids"></td>
-        <td id="titles"></td>
-        <td id="bodies"></td>
-    </tr>
-</table>
 
 
 <script src="Js/jquery.min.js"></script>
@@ -45,14 +23,9 @@
     $('#ajaxBtn').click(function () {
         console.log('Request Started!')
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com/posts/3',
+            url: 'http://localhost:8080/AAD_war_exploded/hello',
             // async: false,
-            success: function (response) {
-                $('#userId').append(response.userId)
-                $('#id').append(response.id)
-                $('#title').append(response.title)
-                $('#body').append(response.body)
-            }
+
 
         })
         console.log('Request Finished!')
@@ -62,17 +35,10 @@
 <script>
     $('#tableBtn').click(function () {
         $.ajax({
-            url: 'https://jsonplaceholder.typicode.com/posts',
-            success: function (array) {
-                for (const data of array) {
-                    $('#tbl').append(`
-                    <tr>
-                    <td>${data.userId}</td>
-                    <td>${data.id}</td>
-                    <td>${data.title}</td>
-                    <td>${data.body}</td>
-</tr>`)
-                }
+            url: 'http://localhost:8080/AAD_war_exploded/hello',
+            method: 'GET',
+            success: function (response) {
+                console.log("Response to the requested function from the Java EE module")
             }
         })
     })
