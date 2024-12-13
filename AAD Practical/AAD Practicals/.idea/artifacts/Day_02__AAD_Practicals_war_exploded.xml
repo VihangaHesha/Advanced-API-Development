@@ -4,7 +4,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="Day 02  AAD_Practicals" />
+          <element id="module-output" name="Day 02 AAD_Practicals" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Day 02  AAD_Practicals/web/Web" />
