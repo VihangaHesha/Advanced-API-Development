@@ -94,7 +94,32 @@
 <script>
 
     const fetchStudentData = () => {
+        $.ajax({
+            url: "http://localhost:8080/Day_02_AAD_Practicals2_war_exploded/student",
+            type: "GET",
+            success: (res) => {
+                const tableBody = $('#student_table_body');
+                tableBody.empty();
+                res.forEach(student => {
+                    tableBody.append(`
+               <tr>
+               <td>${student.id}</td>
+                   <td>${student.name}</td>
+                   <td>${student.email}</td>
+                   <td>${student.age}</td>
+                    <td>
+                       <button class="btn btn-warning btn-sm" onclick="editStudent('${student.id}', '${student.name}', '${student.email}', '${student.age}')">Edit</button>
+                       <button class="btn btn-danger btn-sm" onclick="deleteStudent('${student.id}')">Delete</button>
+                   </td>
+               </tr>
+           `)
+                })
 
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        })
     }
 
     $('#btn_update_student').click((e) => {
@@ -130,6 +155,7 @@
                 age,
             },
             success:(resp) =>{
+                fetchStudentData()
                 console.log(resp)
             },
             error:(err) =>{

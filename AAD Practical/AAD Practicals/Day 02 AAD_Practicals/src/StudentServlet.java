@@ -27,6 +27,8 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
 
+        resp.setContentType("application/json");
+
         StringBuilder studentJsonList = new StringBuilder("[");
         for (StudentDTO studentDTO : studentDTOList) {
 
@@ -57,6 +59,8 @@ public class StudentServlet extends HttpServlet {
             id = studentDTOList.size() + 1;
         }catch (NumberFormatException e){
             System.out.println("Invalid Age!!");
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"Invalid Age\"}");
             return;
         }
 
