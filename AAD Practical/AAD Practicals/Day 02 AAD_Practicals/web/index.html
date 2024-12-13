@@ -133,7 +133,17 @@
         const studentData = {
             id, name, email, age
         }
-
+        $.ajax({
+            url:`http://localhost:8080/Day_02_AAD_Practicals2_war_exploded/student?id=${id}&name=${name}&email=${email}&age=${age}`,
+            type:"PUT",
+            success:(resp) =>{
+                fetchStudentData()
+                console.log(resp)
+            },
+            error:(err) =>{
+                console.log(err)
+            }
+        })
     })
 
     $('#btn_save_student').click((e) => {
@@ -176,7 +186,17 @@
 
     const deleteStudent = (id) => {
         if (confirm("Are you sure ?")) {
-
+            $.ajax({
+                url : `http://localhost:8080/Day_02_AAD_Practicals2_war_exploded/student?id=${id}`,
+                type : "DELETE",
+                success:(resp) =>{
+                    fetchStudentData()
+                    console.log(resp)
+                },
+                error:(err) =>{
+                    console.log(err)
+                }
+            })
         } else {
             console.log("no")
         }
