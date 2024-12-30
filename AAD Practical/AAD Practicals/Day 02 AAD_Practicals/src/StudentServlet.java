@@ -101,14 +101,14 @@ public class StudentServlet extends HttpServlet {
         }
     }
 
-    private StudentDTO findById(int id) {
-    for (StudentDTO studentDTO : studentDTOList){
-        if (studentDTO.getId() == id){
-            return studentDTO;
+        private StudentDTO findById(int id) {
+        for (StudentDTO studentDTO : studentDTOList){
+            if (studentDTO.getId() == id){
+                return studentDTO;
+            }
         }
-    }
-        return null;
-    }
+            return null;
+        }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
