@@ -25,21 +25,19 @@ public class ItemServlet extends HttpServlet {
 
         try {
             Connection connection = getCreatedConnection();
-
             ResultSet resultSet = connection.prepareStatement("SELECT * FROM item").executeQuery();
-
             JsonArrayBuilder allItems = Json.createArrayBuilder();
 
             while (resultSet.next()) {
-                String itemCode = resultSet.getString(1);
-                String name = resultSet.getString(2);
-                String qty = resultSet.getString(3);
+                String code = resultSet.getString(1);
+                String description = resultSet.getString(2);
+                String qtyOnHand = resultSet.getString(3);
                 String unitPrice = resultSet.getString(4);
 
                 JsonObjectBuilder itemBuilder = Json.createObjectBuilder();
-                itemBuilder.add("itemCode", itemCode);
-                itemBuilder.add("name", name);
-                itemBuilder.add("qty", qty);
+                itemBuilder.add("code", code);
+                itemBuilder.add("description", description);
+                itemBuilder.add("qty", qtyOnHand);
                 itemBuilder.add("unitPrice", unitPrice);
                 allItems.add(itemBuilder.build());
             }
@@ -53,12 +51,12 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String itemCode = req.getParameter("itemCode");
-        String name = req.getParameter("name");
-        String qty = req.getParameter("qty");
+        String code = req.getParameter("code");
+        String description = req.getParameter("description");
+        String qtyOnHand = req.getParameter("qty");
         String unitPrice = req.getParameter("unitPrice");
 
-        if (itemCode == null || name == null || qty == null || unitPrice == null) {
+        if (code == null || description == null || qtyOnHand == null || unitPrice == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"itemCode,name, qty and unitPrice are required\"}");
             return;
@@ -69,9 +67,9 @@ public class ItemServlet extends HttpServlet {
 
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO item VALUES (?, ?, ?, ?)");
 
-            preparedStatement.setString(1, itemCode);
-            preparedStatement.setString(2, name);
-            preparedStatement.setInt(3, Integer.parseInt(qty));
+            preparedStatement.setString(1, code);
+            preparedStatement.setString(2, description);
+            preparedStatement.setInt(3, Integer.parseInt(qtyOnHand));
             preparedStatement.setBigDecimal(4, new BigDecimal(unitPrice));
 
             preparedStatement.executeUpdate();
@@ -84,12 +82,12 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String itemCode = req.getParameter("itemCode");
-        String name = req.getParameter("name");
-        String qty = req.getParameter("qty");
+        String code = req.getParameter("code");
+        String description = req.getParameter("description");
+        String qtyOnHand = req.getParameter("qtyOnHand");
         String unitPrice = req.getParameter("unitPrice");
 
-        if (itemCode == null || name == null || qty == null || unitPrice == null) {
+        if (code == null || description == null || qtyOnHand == null || unitPrice == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"itemCode,name, qty and unitPrice are required\"}");
             return;
@@ -98,12 +96,12 @@ public class ItemServlet extends HttpServlet {
         try {
             Connection connection = getCreatedConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE item SET name = ?, qty = ?, unitPrice = ? WHERE itemCode = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE item SET description = ?, qtyOnHand = ?, unitPrice = ? WHERE code = ?");
 
-            preparedStatement.setString(1, name);
-            preparedStatement.setInt(2, Integer.parseInt(qty));
+            preparedStatement.setString(1, description);
+            preparedStatement.setInt(2, Integer.parseInt(qtyOnHand));
             preparedStatement.setBigDecimal(3, new BigDecimal(unitPrice));
-            preparedStatement.setString(4, itemCode);
+            preparedStatement.setString(4, code);
 
             preparedStatement.executeUpdate();
 
@@ -115,7 +113,7 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String itemCode = req.getParameter("itemCode");
+        String itemCode = req.getParameter("code");
 
         if (itemCode == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -126,7 +124,7 @@ public class ItemServlet extends HttpServlet {
         try {
             Connection connection = getCreatedConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM item WHERE itemCode = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM item WHERE code = ?");
 
             preparedStatement.setString(1, itemCode);
 

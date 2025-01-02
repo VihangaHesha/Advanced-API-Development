@@ -1,7 +1,8 @@
 let customerDatabase = [];
-
 loadCustomerDatabase();
+
 $('#save-customer input, #save-customer textarea').on('input change', realTimeValidate);
+
 $('#update-customer input, #update-customer textarea').on('input change', realTimeValidate);
 
 $('#txt-search-valuec').on('input change', function () {
@@ -11,7 +12,6 @@ $('#txt-search-valuec').on('input change', function () {
     const patterns = {
         'ID': /^C[0-9]{3,}$/,
         'Name': /^([A-Z]\.[A-Z]\. )?[A-Z][a-z]*( [A-Z][a-z]*)*$/,
-        'Contact No': /^[0-9]{10}$/
     };
 
     if (patterns[option]) {
@@ -26,35 +26,38 @@ $('#search-customer-by').on('change', function () {
     const patterns = {
         'ID': /^C[0-9]{3,}$/,
         'Name': /^([A-Z]\.[A-Z]\. )?[A-Z][a-z]*( [A-Z][a-z]*)*$/,
-        'Contact No': /^[0-9]{10}$/
     };
 
     if (patterns[option]) {
         realTimeValidateInput(value, patterns[option], '#txt-search-valuec');
     }
 });
-
 $('#close-savec-btn, #close-savec-icon').on('click', function () {
     resetForm('#save-customer', '#save-customer input, #save-customer textarea');
     initializeNextCustomerId();
 });
-$('#close-updatec-btn, #close-updatec-icon').on('click', function () { 
+
+$('#close-updatec-btn, #close-updatec-icon').on('click', function () {
     resetForm('#update-customer', '#update-customer input, #update-customer textarea');
 });
-
 function loadCustomerDatabase() {
     $.ajax({
-        url: "http://localhost:8081/Application1_Web_exploded/customer",
+        url: "http://localhost:8080/Application_01_war_exploded/customer",
+        method: "GET",
+        dataType : "json",
         success: function (response) {
+            console.log("Success response:", response);
             customerDatabase = response;
-
             initializeNextCustomerId();
             initializeOrderComboBoxes();
             loadAllCustomers();
-            loadCustomerCount();
         },
-        error: function (error) {
-            console.log(error)
+        error: function (xhr, status, error) {
+            console.error('Error loading customer database:');
+            console.error('Status:', status);
+            console.error('Error:', error);
+            console.error('Response:', xhr.responseText);
+            alert('Failed to load customer database. Check console for details.');
         }
     })
 }
@@ -65,13 +68,55 @@ function initializeNextCustomerId() {
     $('#txt-save-cid').val(nextId);
     $('#txt-save-cid').removeClass('is-invalid').addClass('is-valid');
 }
+function generateNextID(currentID) {
+    if (!currentID) return 'C001';
+    let number = parseInt(currentID.slice(1)) + 1;
+    return `C${String(number).padStart(3, '0')}`;
+}
+
+function getCustomerById(id) {
+    return customerDatabase.find(c => c.id === id);
+}
+
+function initializeOrderComboBoxes() {
+    const customerOptions = customerDatabase.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+    // Add these lines only if you have these elements in your HTML
+    if($('#cmb-save-customer')) {
+        $('#cmb-save-customer').html(customerOptions);
+    }
+    if($('#cmb-update-customer')) {
+        $('#cmb-update-customer').html(customerOptions);
+    }
+}
+
+function realTimeValidate() {
+    const element = $(this);
+    const pattern = new RegExp(element.attr('pattern'));
+    const value = element.val();
+
+    if (pattern.test(value)) {
+        element.removeClass('is-invalid').addClass('is-valid');
+    } else {
+        element.removeClass('is-valid').addClass('is-invalid');
+    }
+}
+
+function realTimeValidateInput(value, pattern, element) {
+    if (pattern.test(value)) {
+        $(element).removeClass('is-invalid').addClass('is-valid');
+    } else {
+        $(element).removeClass('is-valid').addClass('is-invalid');
+    }
+}
+
+function resetForm(formId, elements) {
+    $(formId).trigger('reset');
+    $(elements).removeClass('is-valid is-invalid');
+}
 
 function getCustomerByName(name) {
     return customerDatabase.filter(c => c.name === name);
-}
-
-function getCustomerByContactNo(contactNo) {
-    return customerDatabase.filter(c => c.phone === contactNo);
 }
 
 function appendToCustomerTable(customer) {
@@ -80,7 +125,6 @@ function appendToCustomerTable(customer) {
             <td>${customer.id}</td>
             <td>${customer.name}</td>
             <td>${customer.address}</td>
-            <td>${customer.phone}</td>
         </tr>
     `);
 }
@@ -88,7 +132,6 @@ function appendToCustomerTable(customer) {
 function getCustomerByOption(option, value) {
     if (option === 'ID') return getCustomerById(value);
     if (option === 'Name') return getCustomerByName(value);
-    if (option === 'Contact No') return getCustomerByContactNo(value);
     return null;
 }
 
@@ -117,16 +160,14 @@ $('#save-customer').on('submit', function (event) {
         const id = $('#txt-save-cid').val();
         const name = $('#txt-save-cname').val();
         const address = $('#txt-save-caddress').val();
-        const contactNo = $('#txt-save-cno').val();
 
         if (!customerDatabase.some(c => c.id === id)) {
             $.ajax({
-                url: "http://localhost:8081/Application1_Web_exploded/customer",
+                url: "http://localhost:8080/Application_01_war_exploded/customer",
                 method: "POST",
                 data: {
                     id: id,
                     name: name,
-                    phone: contactNo,
                     address: address
                 },
 
@@ -135,7 +176,6 @@ $('#save-customer').on('submit', function (event) {
                     resetForm('#save-customer', '#save-customer input, #save-customer textarea');
                     loadCustomerDatabase();
                     sortCustomerDatabaseById();
-                    loadCustomerCount();
                     initializeOrderComboBoxes();
                 },
                 error: function (error) {
@@ -153,7 +193,6 @@ $('#txt-update-cid').on('input', function (event) {
         const customer = getCustomerById($(this).val());
         $('#txt-update-cname').val(customer.name);
         $('#txt-update-caddress').val(customer.address);
-        $('#txt-update-cno').val(customer.phone);
         $('#update-customer input, #update-customer textarea').addClass('is-valid').removeClass('is-invalid');
     } else {
         $('#txt-update-cname').val('');
@@ -172,11 +211,10 @@ $('#update-customer').on('submit', function (event) {
         const id = $('#txt-update-cid').val();
         const name = $('#txt-update-cname').val();
         const address = $('#txt-update-caddress').val();
-        const contactNo = $('#txt-update-cno').val();
 
         if (customerDatabase.some(c => c.id === id)) {
             $.ajax({
-                url: "http://localhost:8081/Application1_Web_exploded/customer?id="+ id + "&name=" + name + "&phone=" + contactNo + "&address=" + address,
+                url: "http://localhost:8080/Application_01_war_exploded/customer?id="+ id + "&name=" + name  + "&address=" + address,
                 method: "PUT",
                 success: function (response) {
                     showToast('success', 'Customer updated successfully !');
@@ -243,13 +281,12 @@ $('#delete-customer-btn').on('click', function () {
         $('#confirm-delete-btn').one('click', function () {
             for (const customer of customers) {
                 $.ajax({
-                    url: "http://localhost:8081/Application1_Web_exploded/customer?id="+ customer.id,
+                    url: "http://localhost:8080/Application_01_war_exploded/customer?id="+ customer.id,
                     method: 'DELETE',
                     success: function (response) {
                         showToast('success', 'Customer deleted successfully!');
                         $('#confirm-delete-model').modal('hide');  // Hide modal after deletion
                         loadCustomerDatabase();
-                        loadCustomerCount();
                         initializeOrderComboBoxes();
                     },
                     error: function (error) {
@@ -264,13 +301,12 @@ $('#delete-customer-btn').on('click', function () {
 
         $('#confirm-delete-btn').one('click', function () {
             $.ajax({
-                url: "http://localhost:8081/Application1_Web_exploded/customer?id="+ customers.id,
+                url: "http://localhost:8080/Application_01_war_exploded/customer?id="+ customers.id,
                 method: 'DELETE',
                 success: function (response) {
                     showToast('success', 'Customer deleted successfully!');
                     $('#confirm-delete-model').modal('hide');  // Hide modal after deletion
                     loadCustomerDatabase();
-                    loadCustomerCount();
                     initializeOrderComboBoxes();
                 },
                 error: function (error) {

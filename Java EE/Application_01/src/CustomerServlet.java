@@ -23,6 +23,7 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
 
         try {
             Connection connection = getCreatedConnection();
@@ -34,13 +35,11 @@ public class CustomerServlet extends HttpServlet {
             while (resultSet.next()) {
                 String id = resultSet.getString(1);
                 String name = resultSet.getString(2);
-                String phone = resultSet.getString(3);
-                String address = resultSet.getString(4);
+                String address = resultSet.getString(3);
 
                 JsonObjectBuilder customerBuilder = Json.createObjectBuilder();
                 customerBuilder.add("id", id);
                 customerBuilder.add("name", name);
-                customerBuilder.add("phone", phone);
                 customerBuilder.add("address", address);
                 allCustomers.add(customerBuilder.build());
             }
@@ -56,10 +55,9 @@ public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         String name = req.getParameter("name");
-        String phone = req.getParameter("phone");
         String address = req.getParameter("address");
 
-        if (id == null || name == null || phone == null || address == null){
+        if (id == null || name == null || address == null){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"id,name, phone and address are required\"}");
             return;
@@ -69,7 +67,7 @@ public class CustomerServlet extends HttpServlet {
 
             Connection connection = getCreatedConnection();
 
-            connection.prepareStatement("INSERT INTO customer VALUES ('" + id + "', '" + name + "', '" + phone + "', '" + address + "')").executeUpdate();
+            connection.prepareStatement("INSERT INTO customer VALUES ('" + id + "', '" + name +  "', '" + address + "')").executeUpdate();
             resp.setStatus(HttpServletResponse.SC_CREATED);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
@@ -80,10 +78,9 @@ public class CustomerServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         String name = req.getParameter("name");
-        String phone = req.getParameter("phone");
         String address = req.getParameter("address");
 
-        if (id == null || name == null || phone == null || address == null){
+        if (id == null || name == null  || address == null){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\" : \"id, name, phone and age are required\"}");
             return;
@@ -92,12 +89,11 @@ public class CustomerServlet extends HttpServlet {
         try {
             Connection connection = getCreatedConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET name = ?, phone = ?, address = ? WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET name = ?, address = ? WHERE id = ?");
 
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, phone);
-            preparedStatement.setString(3, address);
-            preparedStatement.setString(4, id);
+            preparedStatement.setString(2, address);
+            preparedStatement.setString(3, id);
 
             preparedStatement.executeUpdate();
 

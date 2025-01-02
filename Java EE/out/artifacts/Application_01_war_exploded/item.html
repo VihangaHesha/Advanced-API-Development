@@ -7,7 +7,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -15,52 +14,183 @@
                 <a class="nav-link active" aria-current="page" href="index.html">Customer</a>
                 <a class="nav-link active" aria-current="page" href="item.html">Item</a>
                 <a class="nav-link active" aria-current="page" href="order.html">Order</a>
-                <a class="nav-link active" aria-current="page" href="report.html">Report</a>
             </div>
         </div>
     </div>
 </nav>
-
 <div class="container mt-5">
     <h1 class="text-center">Item Form</h1>
-    <hr>
-
-    <form class="row g-3">
-        <div class="col-md-6">
-            <label for="itemId" class="form-label">ID</label>
-            <input type="text" class="form-control" id="itemId" />
+    <hr/>
+    <button type="button" class="btn btn-primary mb-3 text-right" data-bs-toggle="modal"
+            data-bs-target="#customerModel">
+        Add New Item
+    </button>
+    <!--     add student modal-->
+    <div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="container m-2">
+                    <form>
+                        <div class="mb-3">
+                            <label for="id" class="form-label">ID</label>
+                            <input type="text" class="form-control" id="id">
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="desc">
+                        </div>
+                        <div class="mb-3">
+                            <label for="qty" class="form-label">QTY</label>
+                            <input type="text" class="form-control" id="qty">
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitPrice" class="form-label">Unit Price</label>
+                            <input type="text" class="form-control" id="unitPrice">
+                        </div>
+                        <button id="btn_save_item" type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <label for="itemDesc" class="form-label">Description</label>
-            <input type="text" class="form-control" id="itemDesc" />
+    </div>
+    <!-- Update student Modal -->
+    <div class="modal fade" id="updateCustomerModel" tabindex="-1" aria-labelledby="updateCustomerModelLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="container m-2">
+                    <form>
+                        <div class="mb-3">
+                            <label for="updated_item_id" class="form-label">Item Id</label>
+                            <input type="text" class="form-control" id="updated_item_id" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_name" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="updated_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_qty" class="form-label">QTY</label>
+                            <input type="text" class="form-control" id="updated_qty">
+                        </div>
+                        <div class="mb-3">
+                            <label for="updated_unit_price" class="form-label">Unit Price</label>
+                            <input type="text" class="form-control" id="updated_unit_price">
+                        </div>
+                        <button id="btn_update_customer" type="submit" class="btn btn-warning">Update</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="col-6">
-            <label for="itemQty" class="form-label">QTY</label>
-            <input type="number" class="form-control" id="itemQty" />
-        </div>
-        <div class="col-12">
-            <button type="submit" id="btnItemSave" class="btn btn-primary">Save</button>
-            <button type="submit" id="btnItemDelete" class="btn btn-danger">Delete</button>
-            <button type="submit" id="btnItemUpdate" class="btn btn-warning">Update</button>
-        </div>
-    </form>
-    <br>
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <td>ID</td>
-        <td>Description</td>
-        <td>Qty</td>
-    </tr>
-    </thead>
-    <tbody id="item_table_body">
-
-    </tbody>
-</table>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>Description</td>
+            <td>QTY</td>
+            <td>Unit Price</td>
+            <td>Action</td>
+        </tr>
+        </thead>
+        <tbody id="item_table_body">
+        </tbody>
+    </table>
 </div>
-
-<script src="js/jquery-3.7.1.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script></script>
+<script>
+    const fetchCustomerData = () => {
+        $.ajax({
+            url: "http://localhost:8080/Application_01_war_exploded/item",
+            type: "GET",
+            success: (res) => {
+                $('#item_table_body').empty();
+                res.forEach(item => {
+                    $('#item_table_body').append(`
+               <tr>
+               <td>${item.code}</td>
+                   <td>${item.description}</td>
+                   <td>${item.qty}</td>
+                   <td>${item.unitPrice}</td>
+                    <td>
+                       <button class="btn btn-warning btn-sm" onclick="editCustomer('${item.id}', '${item.name}', '${item.address}','${item.unitPrice}')">Edit</button>
+                       <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${item.id}')">Delete</button>
+                   </td>
+               </tr>
+           `)
+                })
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        })
+    }
+    $('#btn_update_customer').click((e) => {
+        e.preventDefault()
+        const id = $('#updated_item_id').val()
+        const desc = $('#updated_desc').val()
+        const qty = $('#updated_qty').val()
+        const unitPrice = $('#updated_unit_price').val()
+        const customerData = {
+            id, desc, qty,unitPrice
+        }
+        $.ajax({
+            url:`http://localhost:8080/Application_01_war_exploded/item?id=${id}&desc=${desc}&qty=${qty}&unitPrice=${unitPrice}`,
+            type:"PUT",
+            success:(resp) =>{
+                fetchCustomerData()
+                console.log(resp)
+            },
+            error:(err) =>{
+                console.log(err)
+            }
+        })
+    })
+    $('#btn_save_customer').click((e) => {
+        e.preventDefault()
+        const code = $('#code').val()
+        const desc = $('#desc').val()
+        const qty = $('#qty').val()
+        const unitPrice = $('#unitPrice').val()
+        const customerData = {
+            code, desc,qty,unitPrice
+        }
+        $.ajax({
+            url:"http://localhost:8080/Application_01_war_exploded/item",
+            type:"POST",
+            data:{
+                code,
+                desc,
+                qty,
+                unitPrice
+            },
+            success:(resp) =>{
+                fetchCustomerData()
+                console.log(resp)
+            },
+            error:(err) =>{
+                console.log(err)
+            }
+        })
+    })
+    const editCustomer = (uid, desc, qty, unitPrice) => {
+        $('#updated_item_id').val(uid)
+        $('#updated_desc').val(desc)
+        $('#updated_qty').val(qty)
+        $('#updated_unit_price').val(unitPrice)
+        $('#updateCustomerModel').modal('show')
+    }
+    const deleteCustomer = (id) => {
+        if (confirm("Are you sure ?")) {
+            $.ajax({
+                url : `http://localhost:8080/Application_01_war_exploded/item?id=${id}`,
+                type : "DELETE"
+            })
+        } else {
+            console.log("no")
+        }
+    }
+    fetchCustomerData()
+</script>
 </body>
 </html>
