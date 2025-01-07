@@ -1,99 +1,426 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-         version="4.0">
-</web-app>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <title>Customer Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8" />
+    <title>Customer Management System</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <style>
+        :root {
+            --bs-primary-rgb: 139, 92, 246;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --accent-color: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #131313 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        /* Modern Navbar Styles */
+        .navbar {
+            background: rgba(26, 26, 26, 0.95) !important;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color) !important;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.7rem 1.2rem;
+            margin: 0 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .nav-pills .nav-link:not(.active):hover {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--accent-color);
+        }
+
+        /* Container and Card Styles */
+        .container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-top: 2rem !important;
+        }
+
+        /* Table Styles */
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table thead {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .table thead td {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .table tbody tr {
+            background-color: rgba(45, 45, 45, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Form Styles */
+        .form-control {
+            background-color: var(--bg-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.8rem;
+        }
+
+        .form-control:focus {
+            background-color: var(--bg-primary);
+            border-color: var(--accent-color);
+            box-shadow: none;
+        }
+
+        /* Button Styles */
+        .btn {
+            border-radius: 8px;
+            padding: 0.7rem 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border: none;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            border: none;
+            color: var(--bg-primary);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            border: none;
+        }
+
+        /* Badge Styles */
+        .badge {
+            padding: 0.5em 1em;
+            border-radius: 6px;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: rgba(45, 45, 45, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+
+        .stat-card-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .stat-card-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="index.html">Customer</a>
-                <a class="nav-link active" aria-current="page" href="item.html">Item</a>
-                <a class="nav-link active" aria-current="page" href="order.html">Order</a>
-            </div>
+<!-- Modern Navbar -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-cube me-2"></i>
+            CMS
+        </a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav nav-pills ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html">
+                        <i class="fas fa-users me-2"></i>Customers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="item.html">
+                        <i class="fas fa-box me-2"></i>Items
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="order.html">
+                        <i class="fas fa-shopping-cart me-2"></i>Orders
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
-<div class="container mt-5">
-    <h1 class="text-center">Customer Form</h1>
-    <hr/>
-    <button type="button" class="btn btn-primary mb-3 text-right" data-bs-toggle="modal"
-            data-bs-target="#customerModel">
-        Add New Customer
-    </button>
-    <!--     add student modal-->
-    <div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="container m-2">
-                    <form>
-                        <div class="mb-3">
-                            <label for="id" class="form-label">ID</label>
-                            <input type="text" class="form-control" id="id">
-                        </div>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address">
-                        </div>
-                        <button id="btn_save_customer" type="submit" class="btn btn-primary">Save</button>
-                    </form>
+
+<div class="container">
+    <!-- Stats Row -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-card-value">248</div>
+                        <div class="stat-card-label">Total Customers</div>
+                    </div>
+                    <i class="fas fa-users stat-card-icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-card-value">12</div>
+                        <div class="stat-card-label">New This Month</div>
+                    </div>
+                    <i class="fas fa-user-plus stat-card-icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-card-value">85%</div>
+                        <div class="stat-card-label">Active Rate</div>
+                    </div>
+                    <i class="fas fa-chart-line stat-card-icon"></i>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Update student Modal -->
-    <div class="modal fade" id="updateCustomerModel" tabindex="-1" aria-labelledby="updateCustomerModelLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="container m-2">
-                    <form>
-                        <div class="mb-3">
-                            <label for="updated_customer_id" class="form-label">Customer Id</label>
-                            <input type="text" class="form-control" id="updated_customer_id" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updated_name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="updated_name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="updated_address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="updated_address">
-                        </div>
-                        <button id="btn_update_customer" type="submit" class="btn btn-warning">Update</button>
-                    </form>
-                </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Customer Management</h1>
+        <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#customerModel"
+        >
+            <i class="fas fa-plus me-2"></i>Add New Customer
+        </button>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>Address</td>
+                        <td>Actions</td>
+                    </tr>
+                    </thead>
+                    <tbody id="customer_table_body"></tbody>
+                </table>
             </div>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Address</td>
-            <td>Actions</td>
-        </tr>
-        </thead>
-        <tbody id="customer_table_body">
-        </tbody>
-    </table>
 </div>
-<script src="js/jquery-3.7.1.min.js"></script>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="customerModel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-plus me-2"></i>Add New Customer
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="id" class="form-label">ID</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="id"
+                                placeholder="Enter customer ID"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="name"
+                                placeholder="Enter customer name"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="address"
+                                placeholder="Enter customer address"
+                        />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button
+                        id="btn_save_customer"
+                        type="button"
+                        class="btn btn-primary"
+                >
+                    <i class="fas fa-save me-2"></i>Save Customer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Customer Modal -->
+<div class="modal fade" id="updateCustomerModel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-edit me-2"></i>Update Customer
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="updated_customer_id" class="form-label"
+                        >Customer ID</label
+                        >
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_customer_id"
+                                readonly
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="updated_name" class="form-label">Name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_name"
+                                placeholder="Update customer name"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="updated_address" class="form-label">Address</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_address"
+                                placeholder="Update customer address"
+                        />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button
+                        id="btn_update_customer"
+                        type="button"
+                        class="btn btn-warning"
+                >
+                    <i class="fas fa-edit me-2"></i>Update Customer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const fetchCustomerData = () => {

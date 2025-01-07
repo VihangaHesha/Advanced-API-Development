@@ -1,9 +1,11 @@
 import DTO.CustomerDTO;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -25,8 +27,11 @@ public class CustomerServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
 
+        ServletContext servletContext = req.getServletContext();
+        BasicDataSource ds = (BasicDataSource) servletContext.getAttribute("DataSource");
         try {
-            Connection connection = getCreatedConnection();
+
+            Connection connection =ds.getConnection();
 
             ResultSet resultSet = connection.prepareStatement("SELECT * FROM customer").executeQuery();
 
@@ -46,7 +51,7 @@ public class CustomerServlet extends HttpServlet {
 
             resp.getWriter().write(allCustomers.build().toString());
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

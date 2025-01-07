@@ -1,101 +1,364 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <title>Item Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8" />
+    <title>Item Management System</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <style>
+        :root {
+            --bs-primary-rgb: 139, 92, 246;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --accent-color: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #131313 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .navbar {
+            background: rgba(26, 26, 26, 0.95) !important;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color) !important;
+        }
+
+        .nav-pills .nav-link {
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.7rem 1.2rem;
+            margin: 0 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .nav-pills .nav-link:not(.active):hover {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--accent-color);
+        }
+
+        .container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-top: 2rem !important;
+        }
+
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table thead {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .table thead td {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .table tbody tr {
+            background-color: rgba(45, 45, 45, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .form-control {
+            background-color: var(--bg-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.8rem;
+        }
+
+        .form-control:focus {
+            background-color: var(--bg-primary);
+            border-color: var(--accent-color);
+            box-shadow: none;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 0.7rem 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border: none;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            border: none;
+            color: var(--bg-primary);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            border: none;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="index.html">Customer</a>
-                <a class="nav-link active" aria-current="page" href="item.html">Item</a>
-                <a class="nav-link active" aria-current="page" href="order.html">Order</a>
-            </div>
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-cube me-2"></i>CMS
+        </a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav nav-pills ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">
+                        <i class="fas fa-users me-2"></i>Customers
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="item.html">
+                        <i class="fas fa-box me-2"></i>Items
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="order.html">
+                        <i class="fas fa-shopping-cart me-2"></i>Orders
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
-<div class="container mt-5">
-    <h1 class="text-center">Item Form</h1>
-    <hr/>
-    <button type="button" class="btn btn-primary mb-3 text-right" data-bs-toggle="modal"
-            data-bs-target="#customerModel">
-        Add New Item
-    </button>
-    <!--     add student modal-->
-    <div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="container m-2">
-                    <form>
-                        <div class="mb-3">
-                            <label for="id" class="form-label">ID</label>
-                            <input type="text" class="form-control" id="id">
-                        </div>
-                        <div class="mb-3">
-                            <label for="desc" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="desc">
-                        </div>
-                        <div class="mb-3">
-                            <label for="qty" class="form-label">QTY</label>
-                            <input type="text" class="form-control" id="qty">
-                        </div>
-                        <div class="mb-3">
-                            <label for="unitPrice" class="form-label">Unit Price</label>
-                            <input type="text" class="form-control" id="unitPrice">
-                        </div>
-                        <button id="btn_save_item" type="submit" class="btn btn-primary">Save</button>
-                    </form>
-                </div>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Item Management</h1>
+        <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#customerModel"
+        >
+            <i class="fas fa-plus me-2"></i>Add New Item
+        </button>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Description</td>
+                        <td>QTY</td>
+                        <td>Unit Price</td>
+                        <td>Action</td>
+                    </tr>
+                    </thead>
+                    <tbody id="item_table_body"></tbody>
+                </table>
             </div>
         </div>
     </div>
-    <!-- Update student Modal -->
-    <div class="modal fade" id="updateCustomerModel" tabindex="-1" aria-labelledby="updateCustomerModelLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="container m-2">
-                    <form>
-                        <div class="mb-3">
-                            <label for="updated_item_id" class="form-label">Item Id</label>
-                            <input type="text" class="form-control" id="updated_item_id" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="updated_name" class="form-label">Description</label>
-                            <input type="text" class="form-control" id="updated_name">
-                        </div>
-                        <div class="mb-3">
-                            <label for="updated_qty" class="form-label">QTY</label>
-                            <input type="text" class="form-control" id="updated_qty">
-                        </div>
-                        <div class="mb-3">
-                            <label for="updated_unit_price" class="form-label">Unit Price</label>
-                            <input type="text" class="form-control" id="updated_unit_price">
-                        </div>
-                        <button id="btn_update_customer" type="submit" class="btn btn-warning">Update</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <td>ID</td>
-            <td>Description</td>
-            <td>QTY</td>
-            <td>Unit Price</td>
-            <td>Action</td>
-        </tr>
-        </thead>
-        <tbody id="item_table_body">
-        </tbody>
-    </table>
 </div>
+
+<!-- Add Item Modal -->
+<div class="modal fade" id="customerModel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-box-open me-2"></i>Add New Item
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="id" class="form-label">ID</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="id"
+                                placeholder="Enter item ID"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc" class="form-label">Description</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="desc"
+                                placeholder="Enter item description"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="qty" class="form-label">QTY</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="qty"
+                                placeholder="Enter quantity"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="unitPrice" class="form-label">Unit Price</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="unitPrice"
+                                placeholder="Enter unit price"
+                        />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button id="btn_save_item" type="button" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Save Item
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Item Modal -->
+<div class="modal fade" id="updateCustomerModel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-edit me-2"></i>Update Item
+                </h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="updated_item_id" class="form-label">Item Id</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_item_id"
+                                readonly
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="updated_name" class="form-label">Description</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_name"
+                                placeholder="Update description"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="updated_qty" class="form-label">QTY</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_qty"
+                                placeholder="Update quantity"
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="updated_unit_price" class="form-label"
+                        >Unit Price</label
+                        >
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="updated_unit_price"
+                                placeholder="Update unit price"
+                        />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button
+                        id="btn_update_customer"
+                        type="button"
+                        class="btn btn-warning"
+                >
+                    <i class="fas fa-edit me-2"></i>Update Item
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="assets/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -104,93 +367,99 @@
             url: "http://localhost:8080/Application_01_war_exploded/item",
             type: "GET",
             success: (res) => {
-                $('#item_table_body').empty();
-                res.forEach(item => {
-                    $('#item_table_body').append(`
-               <tr>
-               <td>${item.code}</td>
-                   <td>${item.description}</td>
-                   <td>${item.qty}</td>
-                   <td>${item.unitPrice}</td>
-                    <td>
-                       <button class="btn btn-warning btn-sm" onclick="editCustomer('${item.id}', '${item.name}', '${item.address}','${item.unitPrice}')">Edit</button>
-                       <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${item.id}')">Delete</button>
-                   </td>
-               </tr>
-           `)
-                })
+                $("#item_table_body").empty();
+                res.forEach((item) => {
+                    $("#item_table_body").append(`
+                   <tr>
+                   <td>${item.code}</td>
+                       <td>${item.description}</td>
+                       <td>${item.qty}</td>
+                       <td>${item.unitPrice}</td>
+                        <td>
+                           <button class="btn btn-warning btn-sm" onclick="editCustomer('${item.id}', '${item.name}', '${item.address}','${item.unitPrice}')">Edit</button>
+                           <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${item.id}')">Delete</button>
+                        </td>
+                   </tr>
+               `);
+                });
             },
             error: (err) => {
                 console.error(err);
-            }
-        })
-    }
-    $('#btn_update_customer').click((e) => {
-        e.preventDefault()
-        const id = $('#updated_item_id').val()
-        const desc = $('#updated_desc').val()
-        const qty = $('#updated_qty').val()
-        const unitPrice = $('#updated_unit_price').val()
-        const customerData = {
-            id, desc, qty,unitPrice
-        }
-        $.ajax({
-            url:`http://localhost:8080/Application_01_war_exploded/item?id=${id}&desc=${desc}&qty=${qty}&unitPrice=${unitPrice}`,
-            type:"PUT",
-            success:(resp) =>{
-                fetchCustomerData()
-                console.log(resp)
             },
-            error:(err) =>{
-                console.log(err)
-            }
-        })
-    })
-    $('#btn_save_customer').click((e) => {
-        e.preventDefault()
-        const code = $('#code').val()
-        const desc = $('#desc').val()
-        const qty = $('#qty').val()
-        const unitPrice = $('#unitPrice').val()
+        });
+    };
+    $("#btn_update_customer").click((e) => {
+        e.preventDefault();
+        const id = $("#updated_item_id").val();
+        const desc = $("#updated_desc").val();
+        const qty = $("#updated_qty").val();
+        const unitPrice = $("#updated_unit_price").val();
         const customerData = {
-            code, desc,qty,unitPrice
-        }
+            id,
+            desc,
+            qty,
+            unitPrice,
+        };
         $.ajax({
-            url:"http://localhost:8080/Application_01_war_exploded/item",
-            type:"POST",
-            data:{
+            url: `http://localhost:8080/Application_01_war_exploded/item?id=${id}&desc=${desc}&qty=${qty}&unitPrice=${unitPrice}`,
+            type: "PUT",
+            success: (resp) => {
+                fetchCustomerData();
+                console.log(resp);
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    });
+    $("#btn_save_customer").click((e) => {
+        e.preventDefault();
+        const code = $("#code").val();
+        const desc = $("#desc").val();
+        const qty = $("#qty").val();
+        const unitPrice = $("#unitPrice").val();
+        const customerData = {
+            code,
+            desc,
+            qty,
+            unitPrice,
+        };
+        $.ajax({
+            url: "http://localhost:8080/Application_01_war_exploded/item",
+            type: "POST",
+            data: {
                 code,
                 desc,
                 qty,
-                unitPrice
+                unitPrice,
             },
-            success:(resp) =>{
-                fetchCustomerData()
-                console.log(resp)
+            success: (resp) => {
+                fetchCustomerData();
+                console.log(resp);
             },
-            error:(err) =>{
-                console.log(err)
-            }
-        })
-    })
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    });
     const editCustomer = (uid, desc, qty, unitPrice) => {
-        $('#updated_item_id').val(uid)
-        $('#updated_desc').val(desc)
-        $('#updated_qty').val(qty)
-        $('#updated_unit_price').val(unitPrice)
-        $('#updateCustomerModel').modal('show')
-    }
+        $("#updated_item_id").val(uid);
+        $("#updated_desc").val(desc);
+        $("#updated_qty").val(qty);
+        $("#updated_unit_price").val(unitPrice);
+        $("#updateCustomerModel").modal("show");
+    };
     const deleteCustomer = (id) => {
         if (confirm("Are you sure ?")) {
             $.ajax({
-                url : `http://localhost:8080/Application_01_war_exploded/item?id=${id}`,
-                type : "DELETE"
-            })
+                url: `http://localhost:8080/Application_01_war_exploded/item?id=${id}`,
+                type: "DELETE",
+            });
         } else {
-            console.log("no")
+            console.log("no");
         }
-    }
-    fetchCustomerData()
+    };
+    fetchCustomerData();
 </script>
 </body>
 </html>

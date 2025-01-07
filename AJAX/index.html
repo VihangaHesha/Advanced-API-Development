@@ -9,9 +9,6 @@
 <p id="para">Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph
     Sample Paragraph Sample Paragraph Sample Paragraph Sample Paragraph</p>
 
-<img id="img" src="">
-
-
 <button id="ajaxBtn">Send An Ajax Request</button>
 
 <button id="tableBtn">Add Details To The Table</button>
@@ -22,12 +19,12 @@
 <script>
     $('#ajaxBtn').click(function () {
         console.log('Request Started!')
-        $.ajax({
+        /*$.ajax({
             url: 'http://localhost:8080/AAD_war_exploded/hello',
             // async: false,
 
 
-        })
+        })*/
         console.log('Request Finished!')
     });
 </script>
@@ -44,11 +41,11 @@
     })
 </script>
 
-<!--<script>
-    //Synchronous
-    /* console.log('1')
+<script>
+    /*//Synchronous
+    /!* console.log('1')
     console.log('2')
-    console.log('3') */
+    console.log('3') *!/
 
     //Asynchronous
     console.log('Start')
@@ -58,7 +55,7 @@
     console.log('End')
     setTimeout(() => {
         console.log('Middle-2')
-    }, 1000)
-</script>-->
+    }, 1000)*/
+</script>
 </body>
 </html>
