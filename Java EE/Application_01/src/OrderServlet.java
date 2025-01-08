@@ -33,17 +33,11 @@ public class OrderServlet extends HttpServlet {
                 String orderId = resultSetOrders.getString(1);
                 String date = resultSetOrders.getString(2);
                 String customerId = resultSetOrders.getString(3);
-                String discount = resultSetOrders.getString(4);
-                String cash = resultSetOrders.getString(5);
-                String balance = resultSetOrders.getString(6);
 
                 JsonObjectBuilder orderBuilder = Json.createObjectBuilder();
                 orderBuilder.add("orderId", orderId);
                 orderBuilder.add("date", date);
                 orderBuilder.add("customerId", customerId);
-                orderBuilder.add("discount", discount);
-                orderBuilder.add("cash", cash);
-                orderBuilder.add("balance", balance);
 
                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orderDetail WHERE orderId = ?");
                 preparedStatement.setString(1, orderId);
@@ -53,12 +47,14 @@ public class OrderServlet extends HttpServlet {
                 while (resultSetOrderDetail.next()) {
                     String oId = resultSetOrderDetail.getString(1);
                     String iId = resultSetOrderDetail.getString(2);
-                    String qty = resultSetOrderDetail.getString(3);
+                    int qty = resultSetOrderDetail.getInt(3);
+                    double unitPrice = resultSetOrderDetail.getDouble(4);
 
                     JsonObjectBuilder orderDetailBuilder = Json.createObjectBuilder();
                     orderDetailBuilder.add("orderId", oId);
                     orderDetailBuilder.add("itemCode", iId);
                     orderDetailBuilder.add("qty", qty);
+                    orderDetailBuilder.add("unitPrice", unitPrice);
 
                     orderDetailsArray.add(orderDetailBuilder.build());
                 }
@@ -78,6 +74,22 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+
+        String orderId = req.getParameter("orderId");
+        Date date = Date.valueOf(req.getParameter("date"));
+        String customerId = req.getParameter("customerId");
+
+        if (orderId == null || date == null || customerId == null){
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\" : \"orderId, date and customerId are required\"}");
+            return;
+        }
+        try {
+            Connection connection = getCreatedConnection();
+            connection.prepareStatement("INSERT INTO orders VALUES ('" + orderId + "', '" + date + "', '" + customerId + "')").executeUpdate();
+            resp.setStatus(HttpServletResponse.SC_CREATED);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

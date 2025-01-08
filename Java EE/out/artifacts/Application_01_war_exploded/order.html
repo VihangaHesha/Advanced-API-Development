@@ -382,7 +382,6 @@
                         <label for="pOItemPrice" class="form-label">Price</label>
                         <input
                                 type="number"
-                                s
                                 class="form-control"
                                 id="pOItemPrice"
                                 required
@@ -454,48 +453,40 @@
     // load customer ids into comboBox
     const loadCustomerData = () => {
         $.ajax({
-            url: "http://localhost:8080/Application1_Web_exploded/customer",
+            url: "http://localhost:8080/Application_01_war_exploded/customer", // Adjusted to match servlet mapping
             type: "GET",
             success: function (data) {
-                const customerSelect = document.getElementById("pOCustomerId"); // Get the select element
-                const customerNameInput = document.getElementById("pOCustomerName"); // Get the customer name input field
+                const customerSelect = document.getElementById("pOCustomerId");
+                const customerNameInput = document.getElementById("pOCustomerName");
 
-                // Clear existing options in the select element
-                customerSelect.innerHTML =
-                    '<option value="">Select Customer</option>';
+                customerSelect.innerHTML = '<option value="">Select Customer</option>';
 
-                // Loop through the customer data and populate the select box with customer ID
                 data.forEach((customer) => {
                     const option = document.createElement("option");
                     option.value = customer.id;
-                    option.textContent = `${customer.id}`; // Show Customer ID in dropdown
+                    option.textContent = `${customer.id}`;
                     customerSelect.appendChild(option);
                 });
 
-                // Add event listener to update customer name input when a customer is selected
                 customerSelect.addEventListener("change", function () {
                     const selectedCustomerId = customerSelect.value;
                     const selectedCustomer = data.find(
-                        (customer) => customer.id == selectedCustomerId
+                        (customer) => customer.id === selectedCustomerId
                     );
 
-                    if (selectedCustomer) {
-                        customerNameInput.value = selectedCustomer.name; // Assign customer name to the input field
-                    } else {
-                        customerNameInput.value = ""; // Clear the input if no customer is selected
-                    }
+                    customerNameInput.value = selectedCustomer ? selectedCustomer.name : "";
                 });
             },
             error: function (error) {
-                console.log(error);
+                console.error("Error loading customers:", error);
             },
         });
-    };
+    }
 
-    // load item ids into comboBox
+        // load item ids into comboBox
     const loadItemData = () => {
         $.ajax({
-            url: "http://localhost:8080/Application1_Web_exploded/item",
+            url: "http://localhost:8080/Application_01_war_exploded/item",
             type: "GET",
             success: function (data) {
                 const itemSelect = document.getElementById("pOItemCode");
@@ -506,7 +497,7 @@
                 data.forEach((item) => {
                     const option = document.createElement("option");
                     option.value = item.code;
-                    option.textContent = `${item.code}`; // Show Item ID in dropdown
+                    option.textContent = `${item.code}`;
                     itemSelect.appendChild(option);
                 });
 
@@ -623,10 +614,10 @@
         const total = $("#cartTotal").text().trim();
 
         // Validate Customer ID
-        if (!customerId || customerId.trim() === "") {
+        /*if (!customerId || customerId.trim() === "") {
             alert("Customer ID is required");
             return;
-        }
+        }*/
 
         // Get the current date
         const currentDate = new Date();
@@ -644,21 +635,20 @@
 
         // First AJAX request: Save order into the order table
         $.ajax({
-            url: "http://localhost:8080/Application1_Web_exploded/orders",
+            url: "http://localhost:8080/Application_01_war_exploded/orders",
             type: "POST",
             data: {
                 orderId,
-                customerId,
                 orderDate: formattedDate,
-                total,
-                currentDate: formattedCurrentDate,
+                customerId,
+
             },
             success: function (data) {
                 $("#purchasedOrdersTableBody").empty();
 
                 // Now save the order details in the orderDetails table
                 $.ajax({
-                    url: "http://localhost:8080/Application1_Web_exploded/orderDetails",
+                    url: "http://localhost:8080/Application_01_war_exploded/orderDetails",
                     type: "POST",
                     data: {
                         orderId,
