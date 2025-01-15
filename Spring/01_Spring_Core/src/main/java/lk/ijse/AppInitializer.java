@@ -28,6 +28,21 @@ public class AppInitializer {
         MyConnection myConnectionBean1 = (MyConnection) context.getBean("getConnection");
         System.out.println(myConnectionBean1);*/
 
+        TestBean1 ref1 = context.getBean("testBean1",TestBean1.class);
+        TestBean1 ref2 = context.getBean("testBean1",TestBean1.class);
+        System.out.println(ref1);
+        System.out.println(ref2);
+
+        TestBean2 ref3 = context.getBean("testBean2",TestBean2.class);
+        TestBean2 ref4 = context.getBean("testBean2",TestBean2.class);
+        System.out.println(ref3);
+        System.out.println(ref4);
+
+        MyConnection ref5 = context.getBean("connection",MyConnection.class);
+        MyConnection ref6 = context.getBean("connection",MyConnection.class);
+        System.out.println(ref5);
+        System.out.println(ref6);
+
         context.registerShutdownHook();
     }
 }
