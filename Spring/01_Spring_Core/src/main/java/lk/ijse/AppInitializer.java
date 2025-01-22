@@ -1,7 +1,6 @@
 package lk.ijse;
 
 import lk.ijse.bean.MyConnection;
-import lk.ijse.bean.SpringBean;
 import lk.ijse.bean.TestBean1;
 import lk.ijse.bean.TestBean2;
 import lk.ijse.config.AppConfig;
@@ -13,7 +12,7 @@ public class AppInitializer {
         context.register(AppConfig.class);
         context.refresh();
 
-      /*  Object bean = context.getBean("springBean");
+        Object bean = context.getBean("springBean");
         System.out.println(bean);
 
         TestBean1 testBean1 = context.getBean("testBean1",TestBean1.class);
@@ -26,7 +25,7 @@ public class AppInitializer {
         System.out.println(myConnectionBean);
 
         MyConnection myConnectionBean1 = (MyConnection) context.getBean("getConnection");
-        System.out.println(myConnectionBean1);*/
+        System.out.println(myConnectionBean1);
 
         TestBean1 ref1 = context.getBean("testBean1",TestBean1.class);
         TestBean1 ref2 = context.getBean("testBean1",TestBean1.class);
