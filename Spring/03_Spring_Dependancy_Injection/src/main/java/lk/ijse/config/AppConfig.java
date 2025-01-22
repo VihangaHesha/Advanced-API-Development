@@ -4,7 +4,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("lk.ijse.bean")
+@ComponentScan("lk.ijse.di")
 public class AppConfig {
 
 }
